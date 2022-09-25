@@ -39,6 +39,8 @@
 
 #define MAXMSGLEN	1024
 
+#define SEND_INTERVAL_IN_MILLISECONDS (20)
+
 using namespace std;
 
 bool bDebug = false;
@@ -182,7 +184,7 @@ int main (int argc, const char **argv)
 
   // Start periodic scheduling
   std::chrono::steady_clock::time_point  schedTime = std::chrono::steady_clock::now();
-  std::chrono::duration<int, std::milli> intervalInMs(250);  
+  std::chrono::duration<int, std::milli> intervalInMs(SEND_INTERVAL_IN_MILLISECONDS);  
 
   while (1) { 
     ClientList.EmitMessagesFromAll();

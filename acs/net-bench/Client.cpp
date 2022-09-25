@@ -80,9 +80,10 @@ int tClient::SendMessage()
     SegRtDataMsg seg_msg;
 
     gettimeofday (&tm, NULL);
-    seg_msg.hdr.time = tm;
+    seg_msg.hdr.time      = tm;
+    seg_msg.hdr.hdr.msgId = ++_nSent;
     _UdpClient.SendMessage((uint8_t *) &seg_msg, sizeof(seg_msg));
-     cout << "Send" << endl;
+    // cout << "Send" << endl;
 
     return 0;
 }

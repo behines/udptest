@@ -20,10 +20,11 @@
 
 struct tLatencySample {
   tLatencySample() {}
-  tLatencySample(int nSamp, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddress) :
-    _nSamp(nSamp), _tmRcv(tmRcv), _tmSent(tmSent), _ClientAddress(ClientAddress) {}
+  tLatencySample(int nRcvdByServer, int nSentByClient, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddress) :
+    _nRcvdByServer(nRcvdByServer), _nSentByClient(nSentByClient), _tmRcv(tmRcv), _tmSent(tmSent), _ClientAddress(ClientAddress) {}
 
-  int                _nSamp;
+  int                _nRcvdByServer;
+  int                _nSentByClient;
   struct timeval     _tmRcv;
   struct timeval     _tmSent;
   struct sockaddr_in _ClientAddress;
@@ -45,7 +46,7 @@ public:
 
   void StartLoggerThread();
 
-  void LogSample(int nSamp, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddr);
+  void LogSample(int nRcvdByServer, int nSentByClient, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddr);
   void PrintSamples();
 
 protected:

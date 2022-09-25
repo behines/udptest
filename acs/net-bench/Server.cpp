@@ -88,10 +88,10 @@ void tSampleLogger::StartLoggerThread()
 *    
 */
 
-void tSampleLogger::LogSample(int nSamp, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddress)
+void tSampleLogger::LogSample(int nRcvdByServer, int nSentByClient, struct timeval &tmRcv, struct timeval &tmSent, struct sockaddr_in &ClientAddress)
 {
   std::lock_guard<std::mutex> cvLock(_SampleQueueMutex);
-  _SampleQueue.push(tLatencySample(nSamp, tmRcv, tmSent, ClientAddress));
+  _SampleQueue.push(tLatencySample(nRcvdByServer, nSentByClient, tmRcv, tmSent, ClientAddress));
   _SampleQueueCondition.notify_one();
 }
 
@@ -131,12 +131,13 @@ void tSampleLogger::PrintSamples()
       inet_ntop(AF_INET, &Sample._ClientAddress, sHostIpString, 40);
 
       timersub(&Sample._tmRcv, &Sample._tmSent, &tmDiff);
-      (void) printf("%s:: Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  N: %3d\n", 
+      (void) printf("%s:: Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  Nrcvd: %3d, NSent: %3d\n", 
                      sHostIpString,
                      Sample._tmSent.tv_sec, Sample._tmSent.tv_usec, 
                      Sample._tmRcv .tv_sec, Sample._tmRcv .tv_usec,
                      tmDiff.tv_sec, tmDiff.tv_usec, 
-                     ((Sample._nSamp-1)%50)+1);
+                     ((Sample._nRcvdByServer-1)%50)+1,
+                     ((Sample._nSentByClient-1)%50)+1);
     }
   }
 }
@@ -218,6 +219,7 @@ int tServer::ProcessIncomingMessages()
 {
   ssize_t  len;;
   char buf[MAX_MESSAGE_SIZE];
+  int            nSent;
   struct timeval tmRcv, tmSent;
   struct sockaddr_in ClientAddress;
 
@@ -231,8 +233,9 @@ int tServer::ProcessIncomingMessages()
 
     gettimeofday(&tmRcv, NULL);
     tmSent = ((DataHdr *) buf)->time;
+    nSent  = ((DataHdr *) buf)->hdr.msgId;
 
-    _SampleLogger.LogSample(++_nReceived, tmRcv, tmSent, ClientAddress);
+    _SampleLogger.LogSample(++_nReceived, nSent, tmRcv, tmSent, ClientAddress);
   }
 
   return 0;
