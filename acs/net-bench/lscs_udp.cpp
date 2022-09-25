@@ -63,9 +63,10 @@ const char *sIpAddressBase[] = { "10.0.2.",
                                  "10.0.4.", 
                                  "10.0.5.", 
                                  "10.0.6." };
+int         iNumIpBases      =  5;
 int         iNumIpsPerBase   = 82;
-int         iCurBase         = 0;
-int         iCurIpInBase     = 1;
+int         iCurBase         =  0;
+int         iCurIpInBase     =  1;
 
 
 
@@ -111,10 +112,10 @@ int PopulateFromValues()
     ClientList.AddClient(sHostIpAddressString, iNextPortNum, sClientIpAddress.c_str());
     cout << "Added client on " << sClientIpAddress << " targeting " << sHostIpAddressString << "::" << iNextPortNum << endl;
 
-    // Increment the IP address
-    if (++iCurIpInBase > iNumIpsPerBase) {
-      iCurIpInBase = 1;
-      iCurBase++;
+    // Increment the IP address.  Rotate - 10.0.2.1, 10.0.3.1, etc.
+    if (++iCurBase >= iNumIpBases) { 
+      iCurBase = 0;
+      iCurIpInBase++;
     }
   }
 
