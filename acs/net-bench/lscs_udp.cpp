@@ -68,7 +68,7 @@ int         iNumIpsPerBase   = 82;
 int         iCurBase         =  0;
 int         iCurIpInBase     =  1;
 
-
+#define DO_ROUND_ROBIN (0)
 
 /*****************************
 * PopulateFromFile
@@ -112,11 +112,19 @@ int PopulateFromValues()
     ClientList.AddClient(sHostIpAddressString, iNextPortNum, sClientIpAddress.c_str());
     cout << "Added client on " << sClientIpAddress << " targeting " << sHostIpAddressString << "::" << iNextPortNum << endl;
 
-    // Increment the IP address.  Rotate - 10.0.2.1, 10.0.3.1, etc.
-    if (++iCurBase >= iNumIpBases) { 
-      iCurBase = 0;
-      iCurIpInBase++;
-    }
+    #if DO_ROUND_ROBIN == 1
+      // Increment the IP address.  Rotate - 10.0.2.1, 10.0.3.1, etc.
+      if (++iCurBase >= iNumIpBases) { 
+        iCurBase = 0;
+        iCurIpInBase++;
+      }
+    #else
+      // Increment the IP address
+      if (++iCurIpInBase > iNumIpsPerBase) {
+        iCurIpInBase = 1;
+        iCurBase++;
+      }
+    #endif
   }
 
   return 0;
