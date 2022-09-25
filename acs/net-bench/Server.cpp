@@ -138,7 +138,7 @@ void tSampleLogger::PrintSamples()
       inet_ntop(AF_INET, &Sample._ClientAddress.sin_addr, sHostIpString, 40);
 
       timersub(&Sample._tmRcv, &Sample._tmSent, &tmDiff);
-      (void) printf("%s::(%d): Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  Nrcvd: %3d, NSent: %3d\n", 
+      (void) printf("%s::(%d): Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  Nrcvd:%3d   NSent:%3d\n", 
                      sHostIpString, _iPortNum,
                      Sample._tmSent.tv_sec, Sample._tmSent.tv_usec, 
                      Sample._tmRcv .tv_sec, Sample._tmRcv .tv_usec,

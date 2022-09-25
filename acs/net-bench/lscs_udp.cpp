@@ -58,6 +58,16 @@ int iNumClients  = 0;
 int iNextPortNum = M1CS_DEFAULT_FIRST_UDP_PORT;
 int iLastPortNum = (M1CS_DEFAULT_FIRST_UDP_PORT + M1CS_DEFAULT_NUM_UDP_PORTS - 1);
 
+const char *sIpAddressBase[] = { "10.0.2.", 
+                                 "10.0.3.", 
+                                 "10.0.4.", 
+                                 "10.0.5.", 
+                                 "10.0.6." };
+int         iNumIpsPerBase   = 82;
+int         iCurBase         = 0;
+int         iCurIpInBase     = 1;
+
+
 
 /*****************************
 * PopulateFromFile
@@ -91,9 +101,21 @@ int PopulateFromFile(string sFilename)
 
 int PopulateFromValues()
 {
+  string sClientIpAddress;
+
   for ( ; iNextPortNum <= iLastPortNum; iNextPortNum++) {
-    ClientList.AddClient(sHostIpAddressString, iNextPortNum);
-    cout << "Added client targeting " << sHostIpAddressString << "::" << iNextPortNum << endl;
+
+    // Create an IP address string
+    sClientIpAddress = sIpAddressBase[iCurBase] + to_string(iCurIpInBase);
+
+    ClientList.AddClient(sHostIpAddressString, iNextPortNum, sClientIpAddress.c_str());
+    cout << "Added client on " << sClientIpAddress << " targeting " << sHostIpAddressString << "::" << iNextPortNum << endl;
+
+    // Increment the IP address
+    if (++iCurIpInBase > iNumIpsPerBase) {
+      iCurIpInBase = 1;
+      iCurBase++;
+    }
   }
 
   return 0;
