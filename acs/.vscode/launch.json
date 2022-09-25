@@ -1,0 +1,214 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "segA1 debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${config:AM64.LOCAL_BIN_DIR}/${config:AM64.PROGRAM}",
+      "args": [],
+      "stopAtEntry": true,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      /* "console": "integratedTerminal", */
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "targetArchitecture": "arm64",
+      "preLaunchTask": "deploy-gdb-segA1",
+      "setupCommands": [{
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+      }],
+      "miDebuggerPath": "/usr/bin/gdb-multiarch",
+      "miDebuggerServerAddress": "${config:AM64.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "GLC->SegA1 debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:GLC_SegA1.LOCAL_BIN_DIR}/${config:GLC_SegA1.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-glc_sega1",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:GLC_SegA1.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "GLC->SegSim debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:GLC_SegSim.LOCAL_BIN_DIR}/${config:GLC_SegSim.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-glc_segsim",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:GLC_SegSim.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "GLC->SectorSim debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:GLC_SectorSim.LOCAL_BIN_DIR}/${config:GLC_SectorSim.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-glc_sectorsim",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:GLC_SegSim.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "SectorSim debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:SECTORSIM.LOCAL_BIN_DIR}/${config:SECTORSIM.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-sectorsim",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:SECTORSIM.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "NodeSim debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:NODESIM.LOCAL_BIN_DIR}/${config:NODESIM.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-nodesim",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:NODESIM.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "SegSim debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:SEGMENTSIM.LOCAL_BIN_DIR}/${config:SEGMENTSIM.PROGRAM}",
+    "args": [],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "deploy-gdb-segmentsim",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb-multiarch",
+    "miDebuggerServerAddress": "${config:SEGMENTSIM.TARGET_IP}:3000",
+  },
+
+  {
+    "name": "lscs_udp",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:LSCS_LOCAL.LOCAL_BIN_DIR}/${config:LSCS_LOCAL.PROGRAM}",
+    /*"args": ["${config:LSCS_LOCAL.PROGRAM_ARGS}"],*/
+    "args": ["-h", "127.0.0.1", "-p", "30000", "-n", "1"],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "main_build",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb",
+    /* "miDebuggerServerAddress": "${config:LSCS_LOCAL.TARGET_IP}:3000", */
+  },
+
+  {
+    "name": "rtc_udp",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${config:LSCS_LOCAL.LOCAL_BIN_DIR}/rtc_udp",
+    /*"args": ["${config:LSCS_LOCAL.PROGRAM_ARGS}"],*/
+    "args": ["-p", "30000", "30001"],
+    "stopAtEntry": true,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    /* "console": "integratedTerminal", */
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "targetArchitecture": "x86_64",
+    "preLaunchTask": "main_build",
+    "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true
+    }],
+    "miDebuggerPath": "/usr/bin/gdb",
+    /* "miDebuggerServerAddress": "${config:LSCS_LOCAL.TARGET_IP}:3000", */
+  },
+
+]
+}
