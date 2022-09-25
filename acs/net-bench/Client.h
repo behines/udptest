@@ -22,7 +22,7 @@
 class tClient {
 friend class tClientList;
 public:
-  tClient(const std::string &sServerIpAddressString, int iPortNum);
+  tClient(const std::string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString = NULL);
 
   tClient(tClient &&obj) noexcept;  // Move constructor - needed so that destruction of temporary does not close file.
   // tHostConnection& operator=(tHostConnection&& other); // Move assignment operator, will add if needed
@@ -48,7 +48,7 @@ protected:
 class tClientList {
 public:
   tClientList() : _bExit(false) {}
-  int AddClient(const std::string &sServerIpAddressString, int iPortNum);
+  int AddClient(const std::string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString = NULL);
 
   bool IsEmpty() { return _ClientList.empty(); }
 

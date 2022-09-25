@@ -30,9 +30,10 @@ using namespace std;
 *    sHostname - hostname or dot-separated IP address
 */
 
-tSampleLogger::tSampleLogger() :
+tSampleLogger::tSampleLogger(int iPortNum) :
   _SampleQueue(),
-  _thread()  // Thread creation is deferred.  See tSampleLogger::StartLoggerThread()
+  _thread(),  // Thread creation is deferred.  See tSampleLogger::StartLoggerThread()
+  _iPortNum(iPortNum)
 {
 }
 
@@ -53,7 +54,8 @@ tSampleLogger::tSampleLogger() :
 tSampleLogger::tSampleLogger(tSampleLogger &&other) noexcept :
   _SampleQueue(move(other._SampleQueue)),
   // Mutex and condition variable cannot be moved.  
-  _thread     (move(other._thread))
+  _thread     (move(other._thread)),
+  _iPortNum   (other._iPortNum)
 {
 }
 
@@ -128,11 +130,16 @@ void tSampleLogger::PrintSamples()
         _SampleQueue.pop();
       }
 
-      inet_ntop(AF_INET, &Sample._ClientAddress, sHostIpString, 40);
+      // Sample._ClientAddress is a sockaddr_in.  inet_ntop wants a struct in_addr, which is 
+      // the sin_addr member of the sockaddr_in
+
+
+
+      inet_ntop(AF_INET, &Sample._ClientAddress.sin_addr, sHostIpString, 40);
 
       timersub(&Sample._tmRcv, &Sample._tmSent, &tmDiff);
-      (void) printf("%s:: Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  Nrcvd: %3d, NSent: %3d\n", 
-                     sHostIpString,
+      (void) printf("%s::(%d): Sent: %02ld.%06ld  Rcvd: %02ld.%06ld  Lat: %02ld.%06ld  Nrcvd: %3d, NSent: %3d\n", 
+                     sHostIpString, _iPortNum,
                      Sample._tmSent.tv_sec, Sample._tmSent.tv_usec, 
                      Sample._tmRcv .tv_sec, Sample._tmRcv .tv_usec,
                      tmDiff.tv_sec, tmDiff.tv_usec, 
@@ -154,7 +161,7 @@ tServer::tServer(int iPortNum, int iReceiveThreadPriority) :
   tPThread(iReceiveThreadPriority, true),
   _iPortNum(iPortNum),
   _UdpServer(iPortNum),
-  _SampleLogger(),
+  _SampleLogger(iPortNum),
   _nReceived(0)
 {
   

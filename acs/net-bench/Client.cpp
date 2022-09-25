@@ -29,9 +29,9 @@ using namespace std;
 * INPUTS:
 */
 
-tClient::tClient(const std::string &sServerIpAddressString, int iPortNum) :
+tClient::tClient(const std::string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString) :
   _iPortNum(iPortNum),
-  _UdpClient(sServerIpAddressString, iPortNum),
+  _UdpClient(sServerIpAddressString, iPortNum, sClientIpAddressString),
   _bDebug(false),
   _nSent(0)
 {
@@ -95,9 +95,9 @@ int tClient::SendMessage()
 * INPUTS:
 */
 
-int tClientList::AddClient(const std::string &sServerIpAddressString, int iPortNum)
+int tClientList::AddClient(const std::string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString)
 {
-  _ClientList.push_back(tClient(sServerIpAddressString, iPortNum));
+  _ClientList.push_back(tClient(sServerIpAddressString, iPortNum, sClientIpAddressString));
 
   return 0;
 }

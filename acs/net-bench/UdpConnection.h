@@ -57,7 +57,7 @@ public:
 
 class tUdpClient {
 public:
-  tUdpClient(const std::string &sServerIpAddressString, int iPortNum);
+  tUdpClient(const std::string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString = NULL);
 
   tUdpClient(tUdpClient &&obj) noexcept;  // Move constructor - needed so that destruction of temporary does not close file.
   // tHostConnection& operator=(tHostConnection&& other); // Move assignment operator, will add if needed
@@ -66,8 +66,8 @@ public:
   tUdpClient(const tUdpClient &) = delete;   
   tUdpClient& operator=(const tUdpClient &) = delete;
 
-
   virtual ~tUdpClient();
+
 
   void SendMessage(uint8_t *pMessage, int iNumBytes);
 

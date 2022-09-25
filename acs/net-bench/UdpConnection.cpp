@@ -27,6 +27,12 @@
 */
 
 
+#include <netinet/in.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include <string>
 #include <cstring>
 #include <cerrno>
@@ -59,24 +65,25 @@ using namespace std;
 *   Will throw a tUdpConnectionException if an error occurs.
 */
 
-tUdpClient::tUdpClient(const string &sServerIpAddressString, int iPortNum) 
+tUdpClient::tUdpClient(const string &sServerIpAddressString, int iPortNum, const char *sClientIpAddressString) 
 {
 
   int iBroadcastEnable = (iPortNum == INADDR_ANY);
-  in_addr_t ipAddressInBinary;
+  in_addr_t ipServerAddressInBinary, ipClientAddressInBinary;
+  struct sockaddr_in siClientTx;
 
   _bInitSuccessfully = false;
 
   // Use inet_pton() to go from string to binary from. Do not use inet_ntoa() or inet_aton(), they are deprecated.
-  if (inet_pton(AF_INET, sServerIpAddressString.c_str(), &ipAddressInBinary) != 1) {
-      throw tUdpConnectionException("Error converting IP address " + sServerIpAddressString + " to binary");
+  if (inet_pton(AF_INET, sServerIpAddressString.c_str(), &ipServerAddressInBinary) != 1) {
+    throw tUdpConnectionException("Error converting IP address " + sServerIpAddressString + " to binary");
   }
 
   // Prepare the sockaddr structure for transmissions, to the specified port
   bzero((char*)&_SiHostTx, sizeof(_SiHostTx));
   _SiHostTx.sin_family      = AF_INET;
   _SiHostTx.sin_port        = htons(iPortNum);
-  _SiHostTx.sin_addr.s_addr = ipAddressInBinary;
+  _SiHostTx.sin_addr.s_addr = ipServerAddressInBinary;
 
   // Initialize the socket to 0
   _sockTx = 0;
@@ -90,6 +97,26 @@ tUdpClient::tUdpClient(const string &sServerIpAddressString, int iPortNum)
                  &iBroadcastEnable, sizeof(iBroadcastEnable)) < 0) {
     throw tUdpConnectionException("Error configuring UDP transmit socket broadcast option");
   } 
+
+
+  // If a client source IP address is provided, bind to it.
+  if (sClientIpAddressString != NULL) {
+    // Use inet_pton() to go from string to binary from. Do not use inet_ntoa() or inet_aton(), they are deprecated.
+    if (inet_pton(AF_INET, sClientIpAddressString, &ipClientAddressInBinary) != 1) {
+      throw tUdpConnectionException(string("Error converting IP address ") + sClientIpAddressString + " to binary");
+    }
+    bzero((char*)&siClientTx, sizeof(siClientTx));
+    siClientTx.sin_family      = AF_INET;
+    siClientTx.sin_port        = 0;
+    siClientTx.sin_addr.s_addr = ipClientAddressInBinary;
+
+    if (bind(_sockTx, (struct sockaddr *) &siClientTx, sizeof(siClientTx)) < 0) {
+      throw tUdpConnectionException("Error binding UDP transmit socket");
+    }
+    cout << "Bound client to IP address " << sClientIpAddressString << endl;
+    
+  }
+
 
   cout << "Created UDP transmit socket " << _sockTx << " to " << sServerIpAddressString << "::" << iPortNum << endl;
 

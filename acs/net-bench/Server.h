@@ -33,7 +33,7 @@ struct tLatencySample {
 
 class tSampleLogger {
 public:
-  tSampleLogger();
+  tSampleLogger(int iPortNum);
 
   tSampleLogger(tSampleLogger &&obj) noexcept;  // Move constructor - needed so that destruction of temporary does not close file.
   // tSampleLogger& operator=(tSampleLogger&& other); // Move assignment operator, will add if needed
@@ -57,6 +57,8 @@ protected:
   std::condition_variable _SampleQueueCondition;
 
   std::thread _thread;
+
+  int _iPortNum;
 };
 
 
