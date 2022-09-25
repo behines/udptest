@@ -232,8 +232,6 @@ int tServer::ProcessIncomingMessages()
     gettimeofday(&tmRcv, NULL);
     tmSent = ((DataHdr *) buf)->time;
 
-    cout << "Rvcd" << endl;
-
     _SampleLogger.LogSample(++_nReceived, tmRcv, tmSent, ClientAddress);
   }
 

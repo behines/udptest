@@ -30,6 +30,7 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include "GlcMsg.h"
 #include "GlcLscsIf.h"
@@ -163,26 +164,15 @@ int TraverseArgList(const char *sArgList[])
   return 0;
 }
 
-#if 0
-void timer_handler(int sig, siginfo_t *si, void *uc)
-{
-    UNUSED(sig);
-    UNUSED(uc);
-    struct t_eventData *data = (struct t_eventData *) si->_sifields._rt.si_sigval.sival_ptr;
-    printf("Timer fired %d - thread-id: %d\n", ++data->myData, gettid());
-}
-#endif
-
 
 /*****************************
 * main
+*
+* The timer stuff here follows the example from the timer_create man page
 */
 
 int main (int argc, const char **argv)
 {
-  timer_t ticker;
-  struct sigevent event;
-
   if (TraverseArgList(argv) < 0) {
     cerr << "Error: Invalid switch combination supplied, try " << argv[0] << " -help" << endl;
   }
@@ -190,17 +180,14 @@ int main (int argc, const char **argv)
   if (b_fFlagIsPresent)  PopulateFromFile(sFilename);
   else                   PopulateFromValues();
 
-  #if 0 // Prepare the periodic timer
-    event. 
-
-    if (timer_create(CLOCK_MONOTONIC, struct sigevent *sevp, &ticker) < 0) {
-      throw std::runtime_error("Error creating timer");
-    }
-  #endif
+  // Start periodic scheduling
+  std::chrono::steady_clock::time_point  schedTime = std::chrono::steady_clock::now();
+  std::chrono::duration<int, std::milli> intervalInMs(250);  
 
   while (1) { 
     ClientList.EmitMessagesFromAll();
-    sleep(1);
+    schedTime += intervalInMs;
+    std::this_thread::sleep_until(schedTime);
   }
-
+ 
 }
